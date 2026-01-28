@@ -9,7 +9,7 @@ _CLI_LOADED=1
 
 show_help() {
     cat << EOF
-HRMS Module Analysis Script
+Module Analysis Script
 
 Usage: $(basename "$0") [OPTIONS]
 

@@ -1,4 +1,4 @@
-# HRMS Module Analysis Tool
+# Claude Analyzer
 
 A bash-based automation tool that iteratively analyzes software modules using Claude CLI, with support for parallel processing, markdown validation, and DOCX conversion.
 

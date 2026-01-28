@@ -45,7 +45,7 @@ source "$LIB_DIR/cli.sh"
 main() {
     parse_args "$@"
 
-    print_header "HRMS MODULE ANALYSIS"
+    print_header "MODULE ANALYSIS"
 
     # Check prerequisites (creates state directories)
     check_prerequisites
