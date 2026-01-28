@@ -82,14 +82,16 @@ download_repo() {
     success "Files downloaded and extracted."
 }
 
-# Extract .claude-config.zip
+# Extract .claude-config.zip into .claude directory
 extract_config() {
     local config_zip="$INSTALL_DIR/.claude-config.zip"
+    local claude_dir="$INSTALL_DIR/.claude"
 
     if [ -f "$config_zip" ]; then
-        info "Extracting .claude-config.zip..."
-        unzip -q "$config_zip" -d "$INSTALL_DIR" || error "Failed to extract .claude-config.zip"
-        success ".claude-config.zip extracted."
+        info "Extracting .claude-config.zip into .claude directory..."
+        mkdir -p "$claude_dir"
+        unzip -q "$config_zip" -d "$claude_dir" || error "Failed to extract .claude-config.zip"
+        success ".claude-config.zip extracted to .claude/"
     else
         warn ".claude-config.zip not found in repository."
     fi
