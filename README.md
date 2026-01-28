@@ -60,6 +60,10 @@ The tool includes a configuration system for Claude Code skills and agents:
 
 Create a `module-structure.json` file defining your modules:
 
+> In order to create the module-structure.json
+> You are needed to run claude and invoke the
+> the skill `/module-discovery` that will create acquire the context and create that file at the root directory of the project.
+
 ```json
 {
   "modules": [
