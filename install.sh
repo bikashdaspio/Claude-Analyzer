@@ -71,14 +71,28 @@ download_repo() {
     info "Extracting archive..."
     unzip -q "$temp_zip" -d /tmp || error "Failed to extract zip archive"
 
-    # Move contents to current directory
+    # Copy contents to current directory (including hidden files)
     cp -r "$temp_dir"/* "$INSTALL_DIR"/ || error "Failed to copy files"
+    cp -r "$temp_dir"/.[!.]* "$INSTALL_DIR"/ 2>/dev/null || true
 
     # Clean up
     rm -f "$temp_zip"
     rm -rf "$temp_dir"
 
     success "Files downloaded and extracted."
+}
+
+# Extract .claude-config.zip
+extract_config() {
+    local config_zip="$INSTALL_DIR/.claude-config.zip"
+
+    if [ -f "$config_zip" ]; then
+        info "Extracting .claude-config.zip..."
+        unzip -q "$config_zip" -d "$INSTALL_DIR" || error "Failed to extract .claude-config.zip"
+        success ".claude-config.zip extracted."
+    else
+        warn ".claude-config.zip not found in repository."
+    fi
 }
 
 # Set up permissions
@@ -124,6 +138,7 @@ main() {
 
     check_prerequisites
     download_repo
+    extract_config
     setup_permissions
     print_usage
 }
