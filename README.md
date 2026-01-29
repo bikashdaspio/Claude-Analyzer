@@ -49,7 +49,7 @@ To verify Playwright MCP is working:
 ### Quick Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/bikashdaspio/Claude-Analyzer/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Programmersio/ClaudDocumentAnalyzer/main/install.sh | bash
 ```
 
 ### Manual Installation
