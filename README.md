@@ -55,7 +55,7 @@ curl -fsSL https://raw.githubusercontent.com/Programmersio/ClaudDocumentAnalyzer
 ### Manual Installation
 
 ```bash
-git clone https://github.com/bikashdaspio/Claude-Analyzer.git
+git clone https://github.com/Programmersio/ClaudDocumentAnalyzer.git
 cd Claude-Analyzer
 chmod +x analyze.sh config.sh lib/*.sh
 ```
