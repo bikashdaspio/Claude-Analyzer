@@ -16,9 +16,33 @@ A bash-based automation tool that iteratively analyzes software modules using Cl
 
 - **Bash 4.0+**
 - **Claude CLI** - Anthropic's command-line interface (`claude` command)
+- **Playwright MCP Server** - Required for UI analysis (see below)
 - **jq** - JSON processor for parsing module structure
 - **pandoc** (optional) - For DOCX conversion phase
 - **unzip** - For configuration extraction
+
+### Playwright MCP Server (Required)
+
+The analyzer relies on the Playwright MCP server for UI interaction and analysis. **If Playwright MCP is not configured, the analysis will fail.**
+
+Ensure you have the Playwright MCP server configured in your Claude settings (`~/.claude/settings.json` or project-level `.claude/settings.json`):
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@anthropic-ai/mcp-server-playwright"]
+    }
+  }
+}
+```
+
+To verify Playwright MCP is working:
+1. Start Claude CLI: `claude`
+2. Check that Playwright tools are available (e.g., `mcp__playwright__browser_navigate`)
+
+> **Warning**: Without the Playwright MCP server, skills that require browser automation (UI analysis, process flow capture, etc.) will fail, causing the entire analysis workflow to abort.
 
 ## Installation
 
@@ -37,6 +61,43 @@ chmod +x analyze.sh config.sh lib/*.sh
 ```
 
 ## Configuration
+
+### Environment Variables (Important!)
+
+Before running `./analyze.sh`, you **must** configure the environment variables in `.claude/settings.local.json`. These variables are used by the Claude skills during analysis.
+
+After running `./config.sh init`, edit the settings file:
+
+```bash
+# Open the settings file
+nano .claude/settings.local.json
+# or
+code .claude/settings.local.json
+```
+
+Update the `env` section with your project-specific values:
+
+```json
+{
+  "env": {
+    "APPLICATION_URL": "http://localhost:5173",
+    "STARTUP_SCRIPT": "start-app.sh",
+    "credentials_email": "your-test-email@example.com",
+    "credentials_password": "your-test-password"
+  },
+  "permissions": { ... },
+  "outputStyle": "default"
+}
+```
+
+| Variable | Description |
+|----------|-------------|
+| `APPLICATION_URL` | The URL where your application runs locally |
+| `STARTUP_SCRIPT` | Script to start your application (if applicable) |
+| `credentials_email` | Test credentials email for UI analysis |
+| `credentials_password` | Test credentials password for UI analysis |
+
+> **Note**: These credentials are used by Claude's Playwright integration to interact with your application's UI during analysis. Ensure you use test/development credentials, never production credentials.
 
 ### Initialize Claude Skills & Agents
 
