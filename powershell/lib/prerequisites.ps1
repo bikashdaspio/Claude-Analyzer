@@ -16,7 +16,7 @@ function Test-Prerequisites {
         Write-Host ""
 
         # Run claude with /module-discovery skill, output to stdout
-        & claude --print "/module-discovery"
+        & claude --dangerously-skip-permissions --print --output-format text "/module-discovery"
         if ($LASTEXITCODE -ne 0) {
             Write-LogError "Failed to run module discovery. Please check Claude CLI configuration."
             exit 1

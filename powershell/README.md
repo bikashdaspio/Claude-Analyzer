@@ -1,6 +1,6 @@
 # Claude Analyzer - PowerShell Edition
 
-PowerShell counterpart of the bash-based Claude Analyzer automation tool. This version provides identical functionality with native PowerShell cmdlets, using `Invoke-WebRequest` instead of curl/wget while keeping `jq`, `claude`, and `pandoc` as external dependencies.
+PowerShell counterpart of the bash-based Claude Analyzer automation tool. This version provides identical functionality with native PowerShell cmdlets, using `curl` for downloads while keeping `jq`, `claude`, and `pandoc` as external dependencies.
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ PowerShell counterpart of the bash-based Claude Analyzer automation tool. This v
 
 ```powershell
 # Download and run the installer
-irm https://raw.githubusercontent.com/bikashdaspio/Claude-Analyzer/main/powershell/install.ps1 | iex
+curl.exe -fsSL https://raw.githubusercontent.com/bikashdaspio/Claude-Analyzer/main/powershell/install.ps1 | powershell -
 ```
 
 ### Option 2: Manual download
@@ -172,7 +172,7 @@ Documents/
 
 | Feature | Bash | PowerShell |
 |---------|------|------------|
-| HTTP Client | curl/wget | Invoke-WebRequest |
+| HTTP Client | curl | curl.exe |
 | Parallel Jobs | bash `&` + PIDs | PowerShell Jobs |
 | Archive | zip/unzip | Compress-Archive/Expand-Archive |
 | Script Extension | .sh | .ps1 |

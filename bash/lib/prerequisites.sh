@@ -17,7 +17,7 @@ check_prerequisites() {
         echo ""
 
         # Run claude with /module-discovery skill, output to stdout
-        if ! claude --print "/module-discovery"; then
+        if ! claude --dangerously-skip-permissions --print --output-format text "/module-discovery"; then
             log_error "Failed to run module discovery. Please check Claude CLI configuration."
             exit 1
         fi
