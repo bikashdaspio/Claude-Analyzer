@@ -15,14 +15,14 @@ PowerShell counterpart of the bash-based Claude Analyzer automation tool. This v
 
 ```powershell
 # Download and run the installer
-irm https://raw.githubusercontent.com/programmersio/ClaudDocumentAnalyzer/main/powershell/install.ps1 | iex
+irm https://raw.githubusercontent.com/bikashdaspio/Claude-Analyzer/main/powershell/install.ps1 | iex
 ```
 
 ### Option 2: Manual download
 
 ```powershell
 # Clone or download the repository
-git clone https://github.com/programmersio/ClaudDocumentAnalyzer.git
+git clone https://github.com/bikashdaspio/Claude-Analyzer.git
 cd Claude-Analyzer/powershell
 ```
 

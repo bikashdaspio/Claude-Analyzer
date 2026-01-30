@@ -9,10 +9,23 @@ $script:_PREREQUISITES_LOADED = $true
 function Test-Prerequisites {
     $errors = 0
 
-    # Check module-structure.json exists (HARD STOP)
+    # Check module-structure.json exists - generate if missing
     if (-not (Test-Path $script:MODULE_STRUCTURE_FILE)) {
-        Write-LogError "HARD STOP: module-structure.json not found at $script:MODULE_STRUCTURE_FILE"
-        exit 1
+        Write-LogWarn "module-structure.json not found at $script:MODULE_STRUCTURE_FILE"
+        Write-LogInfo "Invoking Claude to discover module structure..."
+        Write-Host ""
+
+        # Run claude with /module-discovery skill, output to stdout
+        & claude --print "/module-discovery"
+        if ($LASTEXITCODE -ne 0) {
+            Write-LogError "Failed to run module discovery. Please check Claude CLI configuration."
+            exit 1
+        }
+
+        Write-Host ""
+        Write-LogSuccess "Module discovery completed."
+        Write-LogInfo "Please review the generated module-structure.json and run analyze.ps1 again."
+        exit 0
     }
     Write-LogDebug "Found module-structure.json"
 

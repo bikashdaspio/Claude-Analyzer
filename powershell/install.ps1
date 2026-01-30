@@ -5,7 +5,7 @@
 
 .DESCRIPTION
     Downloads and installs Claude-Analyzer from GitHub into the current directory.
-    Uses Invoke-WebRequest (PowerShell's native HTTP client) instead of curl/wget.
+    Uses curl for downloading files.
 
 .PARAMETER Branch
     The branch to download from (default: main)
@@ -26,9 +26,7 @@ param()
 $ErrorActionPreference = "Stop"
 
 # Configuration
-$REPO_URL = "https://github.com/programmersio/ClaudDocumentAnalyzer"
-$REPO_RAW_URL = "https://raw.githubusercontent.com/programmersio/ClaudDocumentAnalyzer"
-$REPO_NAME = "Claude-Analyzer"
+$REPO_RAW_URL = "https://raw.githubusercontent.com/bikashdaspio/Claude-Analyzer/refs/heads"
 $BRANCH = if ($env:BRANCH) { $env:BRANCH } else { "main" }
 $INSTALL_DIR = Get-Location
 
@@ -98,9 +96,9 @@ function Test-InstallPrerequisites {
         Write-Err "PowerShell version 5.1+ required (found: $psVersion)"
     }
 
-    # Check Invoke-WebRequest is available
-    if (-not (Get-Command Invoke-WebRequest -ErrorAction SilentlyContinue)) {
-        Write-Err "Invoke-WebRequest is not available. Please use PowerShell 3.0+."
+    # Check curl is available
+    if (-not (Get-Command curl.exe -ErrorAction SilentlyContinue)) {
+        Write-Err "curl is not available. Please install curl or use Windows 10+."
     }
 
     # Check Expand-Archive is available
@@ -124,16 +122,17 @@ function Get-RemoteFile {
     $url = "$REPO_RAW_URL/$BRANCH/$RemotePath"
 
     try {
-        # Use TLS 1.2 for GitHub
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
         # Ensure parent directory exists
         $parentDir = Split-Path -Parent $LocalPath
         if (-not (Test-Path $parentDir)) {
             New-Item -ItemType Directory -Path $parentDir -Force | Out-Null
         }
 
-        Invoke-WebRequest -Uri $url -OutFile $LocalPath -UseBasicParsing -ErrorAction Stop
+        # Use curl.exe to avoid PowerShell's curl alias
+        $result = & curl.exe -fsSL -o $LocalPath $url 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            return $false
+        }
         return $true
     } catch {
         return $false

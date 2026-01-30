@@ -6,9 +6,7 @@
 set -e
 
 # Configuration
-REPO_URL="https://github.com/programmersio/ClaudDocumentAnalyzer"
-REPO_RAW_URL="https://raw.githubusercontent.com/programmersio/ClaudDocumentAnalyzer"
-REPO_NAME="Claude-Analyzer"
+REPO_RAW_URL="https://raw.githubusercontent.com/bikashdaspio/Claude-Analyzer"
 BRANCH="${BRANCH:-main}"
 INSTALL_DIR="$(pwd)"
 

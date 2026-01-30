@@ -10,10 +10,22 @@ _PREREQUISITES_LOADED=1
 check_prerequisites() {
     local errors=0
 
-    # Check module-structure.json exists (HARD STOP)
+    # Check module-structure.json exists - generate if missing
     if [[ ! -f "$MODULE_STRUCTURE_FILE" ]]; then
-        log_error "HARD STOP: module-structure.json not found at $MODULE_STRUCTURE_FILE"
-        exit 1
+        log_warn "module-structure.json not found at $MODULE_STRUCTURE_FILE"
+        log_info "Invoking Claude to discover module structure..."
+        echo ""
+
+        # Run claude with /module-discovery skill, output to stdout
+        if ! claude --print "/module-discovery"; then
+            log_error "Failed to run module discovery. Please check Claude CLI configuration."
+            exit 1
+        fi
+
+        echo ""
+        log_success "Module discovery completed."
+        log_info "Please review the generated module-structure.json and run analyze.sh again."
+        exit 0
     fi
     log_debug "Found module-structure.json"
 

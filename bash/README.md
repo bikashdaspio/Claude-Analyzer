@@ -16,14 +16,14 @@ Bash-based automation tool that iteratively analyzes software modules using Clau
 ### Option 1: Run the installer
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/programmersio/ClaudDocumentAnalyzer/main/bash/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/bikashdaspio/Claude-Analyzer/main/bash/install.sh | bash
 ```
 
 ### Option 2: Manual download
 
 ```bash
 # Clone or download the repository
-git clone https://github.com/programmersio/ClaudDocumentAnalyzer.git
+git clone https://github.com/bikashdaspio/Claude-Analyzer.git
 cd Claude-Analyzer/bash
 chmod +x analyze.sh config.sh lib/*.sh
 ```
