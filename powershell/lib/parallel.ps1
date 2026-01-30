@@ -226,7 +226,8 @@ function Start-ParallelJob {
     } -ArgumentList $script:SCRIPT_DIR, $Name, $Parent, $Complexity, $resultFile, $script:LOG_DIR, $script:MODULE_STRUCTURE_FILE, $script:FAILED_FILE, $script:DRY_RUN, $script:NO_TIMEOUT, $script:CUSTOM_TIMEOUT, $script:TIMEOUT_LOW, $script:TIMEOUT_MEDIUM, $script:TIMEOUT_HIGH
 
     [void]$script:PARALLEL_JOBS_LIST.Add($job)
-    Write-LogDebug "Launched job $($job.Id) for $(if ($Parent) { "$Parent/" } else { "" })$Name"
+    $displayPath = if ($Parent) { "$Parent/$Name" } else { $Name }
+    Write-LogDebug "Launched job $($job.Id) for $displayPath"
 }
 
 # Parallel processing main loop
@@ -263,7 +264,8 @@ function Invoke-MainLoopParallel {
 
         # Skip already analyzed in the parent process to avoid launching unnecessary jobs
         if (Test-ModuleAnalyzed -ModuleName $name -ParentModule $parent) {
-            Write-LogInfo "[SKIP] $(if ($parent) { "$parent/" } else { "" })$name (already analyzed)"
+            $displayPath = if ($parent) { "$parent/$name" } else { $name }
+            Write-LogInfo "[SKIP] $displayPath (already analyzed)"
             $script:SKIPPED_COUNT++
             continue
         }

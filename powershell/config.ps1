@@ -40,7 +40,10 @@
 #>
 
 [CmdletBinding()]
-param()
+param(
+    [Parameter(ValueFromRemainingArguments = $true)]
+    [string[]]$RemainingArgs
+)
 
 # Stop on errors
 $ErrorActionPreference = "Stop"
@@ -379,7 +382,7 @@ function Test-Structure {
     $agents = @("system-analysist.md", "react-vue-bridge.md", "ui-parity.md")
     foreach ($agent in $agents) {
         $checks++
-        $agentPath = Join-Path $script:CLAUDE_DIR "agents" $agent
+        $agentPath = Join-Path (Join-Path $script:CLAUDE_DIR "agents") $agent
         if (Test-Path $agentPath) {
             Write-Success "agents/$agent"
         } else {
@@ -392,7 +395,7 @@ function Test-Structure {
     $skills = @("brd", "frd", "process-flow", "security-document", "user-stories")
     foreach ($skill in $skills) {
         $checks++
-        $skillPath = Join-Path $script:CLAUDE_DIR "skills" $skill "SKILL.md"
+        $skillPath = Join-Path (Join-Path (Join-Path $script:CLAUDE_DIR "skills") $skill) "SKILL.md"
         if (Test-Path $skillPath) {
             Write-Success "skills/$skill/SKILL.md"
         } else {
@@ -402,7 +405,7 @@ function Test-Structure {
 
         # Check templates directory exists
         $checks++
-        $templatesPath = Join-Path $script:CLAUDE_DIR "skills" $skill "templates"
+        $templatesPath = Join-Path (Join-Path (Join-Path $script:CLAUDE_DIR "skills") $skill) "templates"
         if (Test-Path $templatesPath) {
             $templateCount = (Get-ChildItem -Path $templatesPath -Filter "*.docx" -ErrorAction SilentlyContinue).Count
             if ($templateCount -gt 0) {
@@ -420,7 +423,7 @@ function Test-Structure {
     $commands = @("analyze.md", "iterative-migrate.md")
     foreach ($cmd in $commands) {
         $checks++
-        $cmdPath = Join-Path $script:CLAUDE_DIR "commands" $cmd
+        $cmdPath = Join-Path (Join-Path $script:CLAUDE_DIR "commands") $cmd
         if (Test-Path $cmdPath) {
             Write-Success "commands/$cmd"
         } else {
@@ -628,4 +631,4 @@ function Main-Config {
 }
 
 # Run main with all arguments
-Main-Config -Arguments $args
+Main-Config -Arguments $RemainingArgs

@@ -158,7 +158,7 @@ function Get-DocxOutputPath {
     if ([string]::IsNullOrEmpty($dirPart) -or $dirPart -eq ".") {
         return Join-Path $script:DOCX_OUTPUT_DIR "${baseName}.docx"
     } else {
-        return Join-Path $script:DOCX_OUTPUT_DIR $dirPart "${baseName}.docx"
+        return Join-Path (Join-Path $script:DOCX_OUTPUT_DIR $dirPart) "${baseName}.docx"
     }
 }
 

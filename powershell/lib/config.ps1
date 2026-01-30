@@ -49,7 +49,7 @@ $script:CONVERSION_ONLY = $false
 
 # Output directories
 $script:DOCS_DIR = if ($env:DOCS_DIR) { $env:DOCS_DIR } else { Join-Path $script:SCRIPT_DIR "Documents" }
-$script:DOCX_OUTPUT_DIR = if ($env:DOCX_OUTPUT_DIR) { $env:DOCX_OUTPUT_DIR } else { Join-Path $script:SCRIPT_DIR "Documents" "DOCX" }
+$script:DOCX_OUTPUT_DIR = if ($env:DOCX_OUTPUT_DIR) { $env:DOCX_OUTPUT_DIR } else { Join-Path (Join-Path $script:SCRIPT_DIR "Documents") "DOCX" }
 
 # Validation counters
 $script:VALIDATION_SUCCESS = 0

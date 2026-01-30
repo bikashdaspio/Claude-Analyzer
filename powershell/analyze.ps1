@@ -32,7 +32,10 @@
 #>
 
 [CmdletBinding()]
-param()
+param(
+    [Parameter(ValueFromRemainingArguments = $true)]
+    [string[]]$RemainingArgs
+)
 
 # Stop on errors
 $ErrorActionPreference = "Stop"
@@ -130,7 +133,7 @@ function Main {
 
 # Run main with all arguments
 try {
-    Main -Arguments $args
+    Main -Arguments $RemainingArgs
 } catch {
     Write-Host ""
     Write-LogWarn "Script interrupted. Progress has been saved."
