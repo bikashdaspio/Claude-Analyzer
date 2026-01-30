@@ -7,7 +7,7 @@ A multi-platform automation tool that iteratively analyzes software modules usin
 | Platform | Directory | Status |
 |----------|-----------|--------|
 | Bash (Linux/macOS) | `bash/` | Available |
-| PowerShell (Windows) | `ps/` | Coming soon |
+| PowerShell (Windows) | `powershell/` | Available |
 
 ## Features
 
@@ -35,7 +35,7 @@ A multi-platform automation tool that iteratively analyzes software modules usin
 
 **PowerShell (Windows):**
 - PowerShell 5.1+ or PowerShell Core 7+
-- Coming soon
+- Invoke-WebRequest (built-in)
 
 ### Playwright MCP Server (Required)
 
@@ -67,20 +67,31 @@ To verify Playwright MCP is working:
 #### Quick Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/bikashdaspio/Claude-Analyzer/main/bash/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/programmersio/ClaudDocumentAnalyzer/main/bash/install.sh | bash
 ```
 
 #### Manual Installation
 
 ```bash
-git clone https://github.com/bikashdaspio/Claude-Analyzer.git
+git clone https://github.com/programmersio/ClaudDocumentAnalyzer.git
 cd Claude-Analyzer/bash
 chmod +x analyze.sh config.sh lib/*.sh
 ```
 
 ### PowerShell (Windows)
 
-Coming soon.
+#### Quick Install
+
+```powershell
+irm https://raw.githubusercontent.com/programmersio/ClaudDocumentAnalyzer/main/powershell/install.ps1 | iex
+```
+
+#### Manual Installation
+
+```powershell
+git clone https://github.com/programmersio/ClaudDocumentAnalyzer.git
+cd Claude-Analyzer/powershell
+```
 
 ## Configuration
 
@@ -299,7 +310,22 @@ Documents/
 │       ├── validation.sh   # Markdown validation
 │       ├── conversion.sh   # DOCX conversion
 │       └── cli.sh          # CLI argument parsing
-└── ps/                     # PowerShell scripts (Windows) - Coming soon
+└── powershell/             # PowerShell scripts (Windows)
+    ├── analyze.ps1         # Main analysis script
+    ├── config.ps1          # Configuration/setup script
+    ├── install.ps1         # Installation script
+    ├── README.md           # PowerShell-specific documentation
+    ├── CLAUDE.md           # Claude Code guidance
+    └── lib/                # Library modules
+        ├── config.ps1      # Configuration variables
+        ├── logging.ps1     # Logging functions
+        ├── prerequisites.ps1 # Prerequisite checks
+        ├── json-utils.ps1  # JSON manipulation utilities
+        ├── analysis.ps1    # Core analysis functions
+        ├── parallel.ps1    # Parallel processing
+        ├── validation.ps1  # Markdown validation
+        ├── conversion.ps1  # DOCX conversion
+        └── cli.ps1         # CLI argument parsing
 ```
 
 ## Examples
