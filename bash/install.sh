@@ -7,9 +7,36 @@ set -e
 
 # Configuration
 REPO_URL="https://github.com/bikashdaspio/Claude-Analyzer"
+REPO_RAW_URL="https://raw.githubusercontent.com/bikashdaspio/Claude-Analyzer"
 REPO_NAME="Claude-Analyzer"
 BRANCH="${BRANCH:-main}"
 INSTALL_DIR="$(pwd)"
+
+# Files to download from bash/ directory
+BASH_FILES=(
+    "analyze.sh"
+    "config.sh"
+    "README.md"
+    "CLAUDE.md"
+)
+
+# Files to download from repository root
+ROOT_FILES=(
+    "custom-reference.docx"
+)
+
+# Library files to download from bash/lib/
+LIB_FILES=(
+    "analysis.sh"
+    "cli.sh"
+    "config.sh"
+    "conversion.sh"
+    "json-utils.sh"
+    "logging.sh"
+    "parallel.sh"
+    "prerequisites.sh"
+    "validation.sh"
+)
 
 # Colors for output
 RED='\033[0;31m'
@@ -53,33 +80,58 @@ check_prerequisites() {
     success "All prerequisites met."
 }
 
-# Download and extract the repository
-download_repo() {
-    info "Downloading Claude-Analyzer..."
+# Download a single file from the repository
+download_file() {
+    local remote_path="$1"
+    local local_path="$2"
+    local url="${REPO_RAW_URL}/${BRANCH}/${remote_path}"
 
-    local zip_url="${REPO_URL}/archive/refs/heads/${BRANCH}.zip"
-    local temp_zip="/tmp/${REPO_NAME}.zip"
-    local temp_dir="/tmp/${REPO_NAME}-${BRANCH}"
-
-    # Download zip archive
     if command -v curl &> /dev/null; then
-        curl -fsSL "$zip_url" -o "$temp_zip" || error "Failed to download zip archive"
+        curl -fsSL "$url" -o "$local_path" || return 1
     elif command -v wget &> /dev/null; then
-        wget -q "$zip_url" -O "$temp_zip" || error "Failed to download zip archive"
+        wget -q "$url" -O "$local_path" || return 1
+    fi
+    return 0
+}
+
+# Download bash scripts from repository
+download_bash_files() {
+    info "Downloading Claude-Analyzer bash scripts..."
+
+    # Create lib directory
+    mkdir -p "$INSTALL_DIR/lib"
+
+    # Download main bash files
+    for file in "${BASH_FILES[@]}"; do
+        info "  Downloading $file..."
+        if ! download_file "bash/$file" "$INSTALL_DIR/$file"; then
+            error "Failed to download $file"
+        fi
+    done
+
+    # Download lib files
+    for file in "${LIB_FILES[@]}"; do
+        info "  Downloading lib/$file..."
+        if ! download_file "bash/lib/$file" "$INSTALL_DIR/lib/$file"; then
+            error "Failed to download lib/$file"
+        fi
+    done
+
+    # Download files from repository root
+    for file in "${ROOT_FILES[@]}"; do
+        info "  Downloading $file..."
+        if ! download_file "$file" "$INSTALL_DIR/$file"; then
+            error "Failed to download $file"
+        fi
+    done
+
+    # Download .claude-config.zip from root
+    info "  Downloading .claude-config.zip..."
+    if ! download_file ".claude-config.zip" "$INSTALL_DIR/.claude-config.zip"; then
+        warn "Failed to download .claude-config.zip (may not exist)"
     fi
 
-    info "Extracting archive..."
-    unzip -q "$temp_zip" -d /tmp || error "Failed to extract zip archive"
-
-    # Copy contents to current directory (including hidden files)
-    cp -r "$temp_dir"/* "$INSTALL_DIR"/ || error "Failed to copy files"
-    cp -r "$temp_dir"/.[!.]* "$INSTALL_DIR"/ 2>/dev/null || true
-
-    # Clean up
-    rm -f "$temp_zip"
-    rm -rf "$temp_dir"
-
-    success "Files downloaded and extracted."
+    success "Bash scripts downloaded."
 }
 
 # Extract .claude-config.zip into .claude directory
@@ -87,14 +139,15 @@ extract_config() {
     local config_zip="$INSTALL_DIR/.claude-config.zip"
     local claude_dir="$INSTALL_DIR/.claude"
 
-    if [ -f "$config_zip" ]; then
-        info "Extracting .claude-config.zip into .claude directory..."
-        mkdir -p "$claude_dir"
-        unzip -q "$config_zip" -d "$claude_dir" || error "Failed to extract .claude-config.zip"
-        success ".claude-config.zip extracted to .claude/"
-    else
-        warn ".claude-config.zip not found in repository."
+    if [ ! -f "$config_zip" ]; then
+        warn ".claude-config.zip not found. Skipping config extraction."
+        return 0
     fi
+
+    info "Extracting .claude-config.zip into .claude directory..."
+    mkdir -p "$claude_dir"
+    unzip -q "$config_zip" -d "$claude_dir" || error "Failed to extract .claude-config.zip"
+    success ".claude-config.zip extracted to .claude/"
 }
 
 # Set up permissions
@@ -139,7 +192,7 @@ main() {
     echo ""
 
     check_prerequisites
-    download_repo
+    download_bash_files
     extract_config
     setup_permissions
     print_usage

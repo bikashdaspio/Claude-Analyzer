@@ -1,6 +1,13 @@
 # Claude Analyzer
 
-A bash-based automation tool that iteratively analyzes software modules using Claude CLI, with support for parallel processing, markdown validation, and DOCX conversion.
+A multi-platform automation tool that iteratively analyzes software modules using Claude CLI, with support for parallel processing, markdown validation, and DOCX conversion.
+
+## Platform Support
+
+| Platform | Directory | Status |
+|----------|-----------|--------|
+| Bash (Linux/macOS) | `bash/` | Available |
+| PowerShell (Windows) | `ps/` | Coming soon |
 
 ## Features
 
@@ -14,12 +21,21 @@ A bash-based automation tool that iteratively analyzes software modules using Cl
 
 ## Prerequisites
 
-- **Bash 4.0+**
 - **Claude CLI** - Anthropic's command-line interface (`claude` command)
 - **Playwright MCP Server** - Required for UI analysis (see below)
 - **jq** - JSON processor for parsing module structure
 - **pandoc** (optional) - For DOCX conversion phase
 - **unzip** - For configuration extraction
+
+### Platform-Specific Requirements
+
+**Bash (Linux/macOS):**
+- Bash 4.0+
+- curl or wget
+
+**PowerShell (Windows):**
+- PowerShell 5.1+ or PowerShell Core 7+
+- Coming soon
 
 ### Playwright MCP Server (Required)
 
@@ -46,19 +62,25 @@ To verify Playwright MCP is working:
 
 ## Installation
 
-### Quick Install
+### Bash (Linux/macOS)
+
+#### Quick Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Programmersio/ClaudDocumentAnalyzer/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/bikashdaspio/Claude-Analyzer/main/bash/install.sh | bash
 ```
 
-### Manual Installation
+#### Manual Installation
 
 ```bash
-git clone https://github.com/Programmersio/ClaudDocumentAnalyzer.git
-cd Claude-Analyzer
+git clone https://github.com/bikashdaspio/Claude-Analyzer.git
+cd Claude-Analyzer/bash
 chmod +x analyze.sh config.sh lib/*.sh
 ```
+
+### PowerShell (Windows)
+
+Coming soon.
 
 ## Configuration
 
@@ -149,7 +171,7 @@ Create a `module-structure.json` file defining your modules:
 ### Basic Commands
 
 ```bash
-# Run full analysis workflow (analyze → validate → convert)
+# Run full analysis workflow (analyze -> validate -> convert)
 ./analyze.sh
 
 # Preview what would be analyzed
@@ -206,9 +228,9 @@ The tool runs in 4 phases:
 ### Timeout Configuration
 
 Default timeouts are complexity-based:
-- **Low complexity**: 10 minutes
-- **Medium complexity**: 20 minutes
-- **High complexity**: 30 minutes
+- **Low complexity**: 5 minutes
+- **Medium complexity**: 10 minutes
+- **High complexity**: 15 minutes
 
 ```bash
 # Disable all timeouts
@@ -254,29 +276,30 @@ Documents/
 └── analyze.log             # Main log file
 ```
 
-## Project Structure
+## Repository Structure
 
 ```
 .
-├── analyze.sh              # Main analysis script
-├── config.sh               # Configuration/setup script
-├── install.sh              # Installation script
-├── lib/
-│   ├── config.sh           # Configuration variables
-│   ├── logging.sh          # Logging functions
-│   ├── prerequisites.sh    # Prerequisite checks
-│   ├── json-utils.sh       # JSON manipulation utilities
-│   ├── analysis.sh         # Core analysis functions
-│   ├── parallel.sh         # Parallel processing
-│   ├── validation.sh       # Markdown validation
-│   ├── conversion.sh       # DOCX conversion
-│   └── cli.sh              # CLI argument parsing
-├── .claude/                # Claude skills & agents
-│   ├── agents/             # Custom agents
-│   ├── skills/             # Custom skills
-│   ├── commands/           # Custom commands
-│   └── settings.local.json # Local settings
-└── .claude-config.zip      # Bundled configuration
+├── README.md               # This file
+├── .claude-config.zip      # Bundled Claude configuration
+├── custom-reference.docx   # DOCX template for conversion
+├── bash/                   # Bash scripts (Linux/macOS)
+│   ├── analyze.sh          # Main analysis script
+│   ├── config.sh           # Configuration/setup script
+│   ├── install.sh          # Installation script
+│   ├── README.md           # Bash-specific documentation
+│   ├── CLAUDE.md           # Claude Code guidance
+│   └── lib/                # Library modules
+│       ├── config.sh       # Configuration variables
+│       ├── logging.sh      # Logging functions
+│       ├── prerequisites.sh # Prerequisite checks
+│       ├── json-utils.sh   # JSON manipulation utilities
+│       ├── analysis.sh     # Core analysis functions
+│       ├── parallel.sh     # Parallel processing
+│       ├── validation.sh   # Markdown validation
+│       ├── conversion.sh   # DOCX conversion
+│       └── cli.sh          # CLI argument parsing
+└── ps/                     # PowerShell scripts (Windows) - Coming soon
 ```
 
 ## Examples
